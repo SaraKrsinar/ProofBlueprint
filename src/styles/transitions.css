@@ -1,0 +1,14 @@
+.step-enter-active,
+.step-leave-active {
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.step-enter-from {
+    opacity: 0;
+    transform: translateX(16px);
+}
+
+.step-leave-to {
+    opacity: 0;
+    transform: translateX(-16px);
+}
