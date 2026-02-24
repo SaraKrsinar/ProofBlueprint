@@ -35,6 +35,7 @@ Key implementation principles:
 - Separation of business logic through composables
 
 I separated the AI logic into a composable service so that the UI layer doesn’t depend on a specific AI implementation. This allows the mock layer to be replaced with a real backend integration without refactoring the component structure.
+
 ---
 
 ## Features
