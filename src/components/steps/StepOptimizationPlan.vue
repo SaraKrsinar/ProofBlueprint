@@ -53,9 +53,9 @@ const topPlacement = computed(() => props.result.placements[0])
 const CHECKLIST_ITEMS = [
   'Connect your review source (Google, Trustpilot, or social media) to EmbedSocial',
   `Create a ${LAYOUT_LABELS[props.result.layout.layout] ?? props.result.layout.layout} widget in the EmbedSocial widget builder`,
-  `Place the widget in your ${topPlacement.value ? ZONE_LABELS[topPlacement.value.zone] ?? topPlacement.value.zone : 'primary'} — highest expected impact`,
+  `Place the widget in your ${topPlacement.value ? ZONE_LABELS[topPlacement.value.zone] ?? topPlacement.value.zone : 'primary'} - highest expected impact`,
   'Apply the recommended headline and CTA copy to your widget settings',
-  'Measure conversion rate changes over 2–4 weeks, then expand to secondary placements',
+  'Measure conversion rate changes over 2-4 weeks, then expand to secondary placements',
 ]
 
 function generateEmbedPlan() {
