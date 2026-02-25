@@ -1,50 +1,33 @@
-import { reactive } from 'vue'
-import type {
-    BusinessProfile,
-    GoalSelection,
-    BusinessType,
-    VisitorRange,
-    ConversionGoal,
-    PlacementZone,
-} from '@/types'
+import { reactive, computed } from 'vue'
 import { createDefaultBusinessProfile, createDefaultGoalSelection } from '@/data/optimizerDefaults'
+import type { BusinessProfile, ConversionGoal, PlacementZone } from '@/types'
 
 export function useOptimizer() {
-    const businessProfile = reactive<BusinessProfile>(createDefaultBusinessProfile())
-    const goalSelection = reactive<GoalSelection>(createDefaultGoalSelection())
+    const businessProfile = reactive(createDefaultBusinessProfile())
+    const goalSelection = reactive(createDefaultGoalSelection())
 
-    function setBusinessType(type: BusinessType) {
-        businessProfile.businessType = type
-    }
-
-    function setIndustry(industry: string) {
-        businessProfile.industry = industry
-    }
-
-    function setWebsiteUrl(url: string) {
-        businessProfile.websiteUrl = url
-    }
-
-    function setMonthlyVisitors(range: VisitorRange) {
-        businessProfile.monthlyVisitors = range
+    function updateBusinessProfile<K extends keyof BusinessProfile>(
+        key: K,
+        value: BusinessProfile[K]
+    ) {
+        businessProfile[key] = value
     }
 
     function setPrimaryGoal(goal: ConversionGoal) {
         goalSelection.primaryGoal = goal
-        goalSelection.secondaryGoals = goalSelection.secondaryGoals.filter((g) => g !== goal)
+        goalSelection.secondaryGoals = goalSelection.secondaryGoals.filter(
+            g => g !== goal
+        )
     }
 
     function toggleSecondaryGoal(goal: ConversionGoal) {
         if (goal === goalSelection.primaryGoal) return
 
-        const exists = goalSelection.secondaryGoals.includes(goal)
+        const index = goalSelection.secondaryGoals.indexOf(goal)
 
-        if (exists) {
-            goalSelection.secondaryGoals = goalSelection.secondaryGoals.filter(g => g !== goal)
-            return
-        }
-
-        if (goalSelection.secondaryGoals.length < 2) {
+        if (index !== -1) {
+            goalSelection.secondaryGoals.splice(index, 1)
+        } else if (goalSelection.secondaryGoals.length < 2) {
             goalSelection.secondaryGoals.push(goal)
         }
     }
@@ -53,16 +36,14 @@ export function useOptimizer() {
         goalSelection.currentPlacement = zone
     }
 
-    function isStep1Valid(): boolean {
-        return (
-            businessProfile.businessType !== null &&
-            businessProfile.monthlyVisitors !== null
-        )
-    }
+    const isStep1Valid = computed(() =>
+        businessProfile.businessType !== null &&
+        businessProfile.monthlyVisitors !== null
+    )
 
-    function isStep2Valid(): boolean {
-        return goalSelection.primaryGoal !== null
-    }
+    const isStep2Valid = computed(() =>
+        goalSelection.primaryGoal !== null
+    )
 
     function reset() {
         Object.assign(businessProfile, createDefaultBusinessProfile())
@@ -72,10 +53,7 @@ export function useOptimizer() {
     return {
         businessProfile,
         goalSelection,
-        setBusinessType,
-        setIndustry,
-        setWebsiteUrl,
-        setMonthlyVisitors,
+        updateBusinessProfile,
         setPrimaryGoal,
         toggleSecondaryGoal,
         setCurrentPlacement,

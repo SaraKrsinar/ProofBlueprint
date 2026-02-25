@@ -14,10 +14,7 @@ const { currentStep, steps, progressPercent, nextStep, prevStep, reset: resetSte
 const {
   businessProfile,
   goalSelection,
-  setBusinessType,
-  setMonthlyVisitors,
-  setIndustry,
-  setWebsiteUrl,
+  updateBusinessProfile,
   setPrimaryGoal,
   toggleSecondaryGoal,
   setCurrentPlacement,
@@ -32,20 +29,23 @@ function handleRestart() {
   resetOptimizer()
   resetSteps()
 }
-
 </script>
 
 <template>
   <div class="app">
     <AppHeader />
+
     <main class="app__main">
       <StepLayout :steps="steps" :current-step="currentStep" :progress-percent="progressPercent">
         <Transition name="step" mode="out-in">
-          <StepBusinessProfile v-if="currentStep === 1" :model-value="businessProfile" :is-valid="isStep1Valid()"
-            @update:business-type="setBusinessType" @update:monthly-visitors="setMonthlyVisitors"
-            @update:industry="setIndustry" @update:website-url="setWebsiteUrl" @next="nextStep" />
 
-          <StepGoalSelection v-else-if="currentStep === 2" :model-value="goalSelection" :is-valid="isStep2Valid()"
+          <StepBusinessProfile v-if="currentStep === 1" :model-value="businessProfile" :is-valid="isStep1Valid"
+            @update:business-type="(value) => updateBusinessProfile('businessType', value)"
+            @update:monthly-visitors="(value) => updateBusinessProfile('monthlyVisitors', value)"
+            @update:industry="(value) => updateBusinessProfile('industry', value)"
+            @update:website-url="(value) => updateBusinessProfile('websiteUrl', value)" @next="nextStep" />
+
+          <StepGoalSelection v-else-if="currentStep === 2" :model-value="goalSelection" :is-valid="isStep2Valid"
             @update:primary-goal="setPrimaryGoal" @toggle:secondary-goal="toggleSecondaryGoal"
             @update:current-placement="setCurrentPlacement" @next="nextStep" @back="prevStep" />
 
